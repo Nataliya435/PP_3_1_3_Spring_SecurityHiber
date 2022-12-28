@@ -18,6 +18,8 @@ public class RoleServiceImpl implements RoleService{
     public RoleServiceImpl(RoleDAO roleDAO) {
         this.roleDAO = roleDAO;
     }
+
+
     @Override
     @Transactional
     public List<Role> getUniqAllRoles() {
