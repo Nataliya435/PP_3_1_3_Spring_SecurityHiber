@@ -1,43 +1,44 @@
 package ru.kata.spring.boot_security.demo.services;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.DAO.UserDao;
 import ru.kata.spring.boot_security.demo.models.Person;
-import ru.kata.spring.boot_security.demo.repositories.PersonRepository;
+
 
 import java.util.List;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-
-    private final PersonRepository personRepository;
+    private final UserDao userDAO;
     private final PasswordEncoder passwordEncoder;
 
-    public PersonServiceImpl(PersonRepository personRepository, @Lazy PasswordEncoder passwordEncoder) {
-        this.personRepository = personRepository;
+    @Autowired
+    public PersonServiceImpl(UserDao userdao, @Lazy PasswordEncoder passwordEncoder) {
+        this.userDAO = userdao;
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
-    @Transactional(readOnly = true)
+    @Transactional  //(readOnly = true)
     public List<Person> getAllPersons() {
-        return personRepository.findAll();
+        return userDAO.getAllPersons();
     }
 
     @Override
     @Transactional
     public Person getPersonById(Long id) {
-        return personRepository.findById(id).get();
+        return userDAO.getPersonById(id);
     }
 
     @Override
     @Transactional
     public Person getPersonByLogin(String login) {
-        return personRepository.findByLogin(login);
+        return userDAO.getPersonByLogin(login);
     }
 
 
@@ -45,7 +46,7 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     public void savePerson(Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        personRepository.save(person);
+        userDAO.savePerson(person);
     }
 
 
@@ -53,13 +54,13 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     public void updatePerson(Person updatePerson) {
         updatePerson.setPassword(passwordEncoder.encode(updatePerson.getPassword()));
-        personRepository.save(updatePerson);
+        userDAO.savePerson(updatePerson);
     }
 
 
     @Override
     @Transactional
-    public void deletePerson(Long id) {personRepository.deleteById(id);
+    public void deletePerson(Long id) {userDAO.deletePerson(id);
     }
 
 

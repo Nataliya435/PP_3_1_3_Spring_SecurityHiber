@@ -8,12 +8,18 @@ import java.util.List;
 public interface UserDao {
 
     public void add(Person person);
-    public List<Person> getList();
-    public Person getUser(Long id);
+
+    public List<Person> getAllPersons();
+
+    Person getPersonById(Long id);
+
+    Person getPersonByLogin(String login);
 
     public void deletePerson(Long id);
-    public void editUser(Person person);
+
+    public void editPerson(Person person);
 
     public UserDetails findByLogin(String login);
 
+    public void savePerson(Person person);
 }

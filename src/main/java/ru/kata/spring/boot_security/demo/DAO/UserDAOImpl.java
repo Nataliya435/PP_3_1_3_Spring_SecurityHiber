@@ -26,26 +26,30 @@ public class UserDAOImpl implements UserDao {
     }
 
     @Override
-    public List<Person> getList() {
+    public List<Person> getAllPersons() {
         return entityManager.createQuery("select distinct u from Person u left join fetch u.roles ", Person.class)
                 .getResultList();
     }
 
     @Override
-    public Person getUser(Long id) {
+    public Person getPersonByLogin(String login) {
+        return entityManager.find(Person.class, login);
+    }
+    @Override
+    public Person getPersonById(Long id) {
         return entityManager.find(Person.class, id);
     }
-
     @Override
     public void deletePerson(Long id) {
-
-
         entityManager.createQuery(
                 "DELETE Person WHERE id = :id").setParameter("id", id).executeUpdate();
     }
-
     @Override
-    public void editUser(Person person) {
+    public void editPerson(Person person) {
+        entityManager.merge(person);
+    }
+    @Override
+    public void savePerson(Person person) {
         entityManager.merge(person);
     }
     @Override
